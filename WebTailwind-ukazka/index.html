@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style.css">
+    <!--<link rel="stylesheet" href="styles/style.css">  -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Web 01 - Topinka Dalibor</title>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-myPrimaryColor: #f96d00;
+        }
+
+        @layer base {
+
+        }
+
+    </style>
 </head>
-<body>
-    <div class="page-wrapper">
+<body class="bg-myPrimaryColor">
+    <div class="text -4xl">WA2026 - první web</h1>
 <header>
-    <h1>WA 2026 - první web</h1>
-</header>
+
 <nav>
     <ul>
         <li><a href="#">Domů</a></li>
@@ -21,7 +31,7 @@
     </ul>
 </nav>
 <main>
-    <section class="grid-container">
+    <section class="grid-container grid gap-2">
         <article class="card">
             <h2>Titulek článku 1</h2>
             <p><b>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</b> Saepe necessitatibus accusantium explicabo blanditiis hic ad, quasi distinctio doloribus ea earum possimus quae veritatis omnis vel error, repellat temporibus quo ipsam.</p>
