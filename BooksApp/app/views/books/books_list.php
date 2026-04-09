@@ -1,68 +1,46 @@
-
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
-    <title>Knihovna - Seznam knih</title>
-</head>
-<body>
-    <header>
-        <h1>Aplikace Knihovna</h1>
-        
-        <nav>
-            <ul>
-                <!-- Poznámka: do odkazu href se musí dát reálná absolutní/úplná cesta k souboru index.php -->
-                <nav>
-    <ul>
-        <li><a href="<?= BASE_URL ?>/index.php">Seznam knih (Domů)</a></li>
-        <li><a href="<?= BASE_URL ?>/index.php?url=book/create">Přidat novou knihu</a></li>
-    </ul>
-</nav>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <h2>Dostupné knihy</h2>
-        
-        <?php if (empty($books)): ?>
-            <p>V databázi se zatím nenachází žádné knihy.</p>
-        <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Název knihy</th>
-                        <th>Autor</th>
-                        <th>Rok vydání</th>
-                        <th>Cena</th>
-                        <th>Akce</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($books as $book): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($book['id']) ?></td>
-                            <td><?= htmlspecialchars($book['title']) ?></td>
-                            <td><?= htmlspecialchars($book['author']) ?></td>
-                            <td><?= htmlspecialchars($book['year']) ?></td>
-                            <td><?= htmlspecialchars($book['price']) ?> Kč</td>
-                            <td>
-                                <a href="<?= BASE_URL ?>/index.php?url=book/show/<?= $book['id'] ?>">Detail</a>
-                                <a href="<?= BASE_URL ?>/index.php?url=book/edit/<?= $book['id'] ?>">Upravit</a> | 
-                                <a href="<?= BASE_URL ?>/index.php?url=book/delete/<?= $book['id'] ?>" onclick="return confirm('Opravdu chcete tuto knihu smazat?')">Smazat</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-    </main>
-
-    <footer>
-        <p>&copy; WA 2026 - Výukový projekt</p>
-    </footer>
-</body>
-</html>
+<?php require_once '../app/views/layout/header.php'; ?>
+            <h2 class="text-2xl font-bold text-sky-700 mb-6">Dostupné knihy</h2>
+            
+            <?php if (empty($books)): ?>
+                <div class="bg-sky-50 border border-sky-200 rounded-2xl p-8 shadow-sm text-center">
+                    <p class="text-sky-600 text-lg">V databázi se zatím nenachází žádné knihy.</p>
+                </div>
+            <?php else: ?>
+                <div class="overflow-x-auto bg-white border border-sky-200 rounded-2xl shadow-sm">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-sky-50 text-sky-700 text-sm uppercase tracking-wider border-b border-sky-200">
+                            <tr>
+                                <th class="px-6 py-4 font-bold">ID</th>
+                                <th class="px-6 py-4 font-bold">Název knihy</th>
+                                <th class="px-6 py-4 font-bold">Autor</th>
+                                <th class="px-6 py-4 font-bold">Rok vydání</th>
+                                <th class="px-6 py-4 font-bold">Cena</th>
+                                <th class="px-6 py-4 font-bold">Akce</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-sky-100">
+                            <?php foreach ($books as $book): ?>
+                                <tr class="hover:bg-sky-50/50 transition-colors">
+                                    <td class="px-6 py-4 text-slate-500"><?= htmlspecialchars($book['id']) ?></td>
+                                    <td class="px-6 py-4 font-semibold text-slate-800"><?= htmlspecialchars($book['title']) ?></td>
+                                    <td class="px-6 py-4 text-slate-600"><?= htmlspecialchars($book['author']) ?></td>
+                                    <td class="px-6 py-4 text-slate-600"><?= htmlspecialchars($book['year']) ?></td>
+                                    <td class="px-6 py-4 text-slate-600">
+                                        <span class="bg-sky-100 text-sky-700 py-1 px-3 rounded-full text-sm font-semibold">
+                                            <?= htmlspecialchars($book['price']) ?> Kč
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm whitespace-nowrap">
+                                        <a href="<?= BASE_URL ?>/index.php?url=book/show/<?= $book['id'] ?>" class="text-sky-500 hover:text-sky-700 font-semibold mr-3 transition-colors">Detail</a>
+                                        <a href="<?= BASE_URL ?>/index.php?url=book/edit/<?= $book['id'] ?>" class="text-amber-500 hover:text-amber-700 font-semibold mr-3 transition-colors">Upravit</a> 
+                                        <a href="<?= BASE_URL ?>/index.php?url=book/delete/<?= $book['id'] ?>" onclick="return confirm('Opravdu chcete tuto knihu smazat?')" class="text-red-500 hover:text-red-700 font-semibold transition-colors">Smazat</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+       
+<?php require_once '../app/views/layout/footer.php'; ?>
+    
