@@ -50,17 +50,18 @@
                         <textarea id="description" name="description" rows="5" class="w-full px-4 py-3 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-700 bg-white shadow-sm transition-all">Popis knihy: </textarea>
                     </div>
 
-                    <div class="col-span-1 md:col-span-2 mt-2">
-                        <label class="block text-sm font-bold text-sky-700 mb-2">Obrázky (můžete nahrát více)</label>
-                        <label class="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed border-sky-300 rounded-2xl cursor-pointer hover:border-sky-500 hover:bg-sky-100 transition-colors bg-white">
-                            <span class="text-sky-700 font-semibold text-lg">Klikni pro výběr souborů</span>
-                            <span class="text-sm text-sky-500 mt-1">JPG / PNG / WebP – více souborů najednou</span>
-                            <input type="file" id="images" name="images[]" multiple accept="image/*" class="hidden">
-                        </label>
-                    </div>
-
+                 <div class="col-span-1 md:col-span-2 mt-2">
+                    <label class="block text-sm font-bold text-sky-700 mb-2">Obrázky knih (můžete nahrát více)</label>
+                     <div class="w-full">
+                    <label for="images" class="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed border-sky-300 rounded-2xl cursor-pointer hover:border-sky-500 hover:bg-sky-100 transition-colors bg-white">
+                    <div class="flex flex-col items-center justify-center text-center">
+                     <span id="file-title" class="text-sky-700 font-semibold text-lg">Klikni pro výběr souborů</span>
+                    <span id="file-info" class="text-sm text-sky-500 mt-1 px-4">Žádné soubory nebyly vybrány (JPG / PNG / WebP)</span>
                 </div>
-
+            <input type="file" id="images" name="images[]" multiple accept="image/*" class="hidden">
+        </label>
+    </div>
+</div>
                 <div class="flex justify-end pt-4 border-t border-sky-100">
                     <button type="submit" class="w-full md:w-auto px-8 py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl shadow-lg transition-transform transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-sky-200">
                         Uložit knihu do DB
@@ -68,5 +69,34 @@
                 </div>
 
             </form>
+
+<script>
+    // Najdeme naše HTML prvky podle ID
+    const fileInput = document.getElementById('images');
+    const fileTitle = document.getElementById('file-title');
+    const fileInfo = document.getElementById('file-info');
+
+    // Posloucháme událost 'change' (změna hodnoty v inputu)
+    fileInput.addEventListener('change', function(event) {
+        const files = event.target.files;
+        
+        if (files.length === 0) {
+            // Uživatel výběr zrušil
+            fileTitle.textContent = 'Klikněte pro výběr souborů';
+            fileTitle.className = 'text-sm text-slate-400 font-semibold';
+            fileInfo.textContent = 'Žádné soubory nebyly vybrány';
+        } else if (files.length === 1) {
+            // Vybrán 1 soubor - ukážeme jeho název
+            fileTitle.textContent = 'Soubor připraven';
+            fileTitle.className = 'text-sm text-blue-400 font-bold';
+            fileInfo.textContent = files[0].name;
+        } else {
+            // Vybráno více souborů - ukážeme počet
+            fileTitle.textContent = 'Soubory připraveny';
+            fileTitle.className = 'text-sm text-blue-400 font-bold';
+            fileInfo.textContent = 'Vybráno celkem: ' + files.length + ' souborů';
+        }
+    });
+</script>
 
         <?php require_once '../app/views/layout/footer.php'; ?>

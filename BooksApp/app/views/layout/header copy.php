@@ -12,48 +12,12 @@
         <header class="mb-8 border-b-2 border-sky-100 pb-6">
             <h1 class="text-4xl font-extrabold text-sky-700 mb-6">Aplikace Knihovna</h1>
             
-            <nav class="mt-4 md:mt-0">
-    <ul class="flex flex-col sm:flex-row items-center gap-3">
-        
-        <li>
-            <a href="<?= BASE_URL ?>/index.php" class="block px-5 py-2.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl transition-colors font-semibold text-center">
-                Seznam knih
-            </a>
-        </li>
-
-        <?php if (isset($_SESSION['user_id'])): ?>
-            <li>
-                <a href="<?= BASE_URL ?>/index.php?url=book/create" class="block px-5 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl shadow-md transition-colors font-semibold text-center">
-                    + Přidat knihu
-                </a>
-            </li>
-            
-            <li class="text-slate-500 text-sm sm:ml-4 sm:mr-2 py-2">
-                Ahoj, <span class="text-sky-700 font-bold tracking-wide"><?= htmlspecialchars($_SESSION['user_name']) ?></span>
-            </li>
-            
-            <li>
-                <a href="<?= BASE_URL ?>/index.php?url=auth/logout" class="block px-4 py-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors text-sm uppercase tracking-wider font-bold text-center">
-                    Odhlásit
-                </a>
-            </li>
-
-        <?php else: ?>
-            <li class="sm:ml-4">
-                <a href="<?= BASE_URL ?>/index.php?url=auth/login" class="block px-5 py-2.5 text-sky-600 hover:text-sky-800 hover:bg-sky-50 rounded-xl transition-colors font-semibold text-center">
-                    Přihlásit
-                </a>
-            </li>
-            
-            <li>
-                <a href="<?= BASE_URL ?>/index.php?url=auth/register" class="block px-5 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl shadow-md transition-colors font-semibold text-center">
-                    Registrace
-                </a>
-            </li>
-        <?php endif; ?>
-        
-    </ul>
-</nav>
+            <nav>
+                <ul class="flex flex-col sm:flex-row gap-3">
+                    <li><a href="<?= BASE_URL ?>/index.php" class="block px-5 py-2.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl transition-colors font-semibold text-center">Seznam knih (Domů)</a></li>
+                    <li><a href="<?= BASE_URL ?>/index.php?url=book/create" class="block px-5 py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl shadow-md transition-colors font-semibold text-center">Přidat novou knihu</a></li>
+                </ul>
+            </nav>
         </header>
 
         <main>
