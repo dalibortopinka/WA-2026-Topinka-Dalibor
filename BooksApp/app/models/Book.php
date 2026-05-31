@@ -12,18 +12,20 @@ class Book {
     public function create(
         string $title,
         string $author,
-        string $category,
+        int $category,
         string $subcategory,
         int $year,
         float $price,
         string $isbn,
         string $description,
         string $link,
-        array $images
+        array $images,
+        int $userId // !!! ZMĚNA: NOVÝ PARAMETR PRO ID UŽIVATELE
     ): bool {
-        $sql = "INSERT INTO books (title, author, category, subcategory, year, price, isbn, description, link, images)
-                VALUES (:title, :author, :category, :subcategory, :year, :price, :isbn, :description, :link, :images)";
-        // stmt = statement
+        // !!! ZMĚNA: Přidali jsme created_by do INSERT i VALUES
+        $sql = "INSERT INTO books (title, author, category, subcategory, year, price, isbn, description, link, images, created_by)
+                VALUES (:title, :author, :category, :subcategory, :year, :price, :isbn, :description, :link, :images, :created_by)";
+        
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
@@ -36,13 +38,18 @@ class Book {
             ':isbn' => $isbn,
             ':description' => $description,
             ':link' => $link,
-            ':images' => json_encode($images)
+            ':images' => json_encode($images),
+            ':created_by' => $userId // !!! ZMĚNA: Předání ID do databáze
         ]);
     }
 
     // Získání všech knih z databáze
     public function getAll() {
-        $sql = "SELECT * FROM books ORDER BY id DESC";
+        // 💡 ZMĚNA: Místo "SELECT *" použijeme přesnější dotaz s JOINem
+        $sql = "SELECT books.*, categories.name AS category_name 
+                FROM books 
+                LEFT JOIN categories ON books.category = categories.id 
+                ORDER BY books.id DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         
@@ -62,24 +69,27 @@ class Book {
     }
 
     // Aktualizace existující knihy
-    public function update(
-        $id, $title, $author, $category, $subcategory, 
-        $year, $price, $isbn, $description, $link, $images = []
-    ) {
-        $sql = "UPDATE books 
-                SET title = :title, 
-                    author = :author, 
-                    category = :category, 
-                    subcategory = :subcategory, 
-                    year = :year, 
-                    price = :price, 
-                    isbn = :isbn, 
-                    description = :description, 
-                    link = :link, 
-                    images = :images
-                WHERE id = :id";
-                
-        $stmt = $this->db->prepare($sql);
+   // 1. ZMĚNA: Přidej $updated_by na konec do závorky
+public function update(
+    $id, $title, $author, $category, $subcategory, 
+    $year, $price, $isbn, $description, $link, $images, $updated_by
+) {
+    $sql = "UPDATE books 
+            SET title = :title, 
+                author = :author, 
+                category = :category, 
+                subcategory = :subcategory, 
+                year = :year, 
+                price = :price, 
+                isbn = :isbn, 
+                description = :description, 
+                link = :link, 
+                images = :images,
+                updated_by = :updated_by 
+            WHERE id = :id"; 
+            // 2. ZMĚNA: Přidán řádek 'updated_by = :updated_by' (Nezapomeň na čárku za :images!)
+            
+    $stmt = $this->db->prepare($sql);
 
         // Parametrů je stejné množství jako u create, navíc je pouze :id
         return $stmt->execute([
@@ -93,7 +103,8 @@ class Book {
             ':isbn' => $isbn,
             ':description' => $description,
             ':link' => $link,
-            ':images' => json_encode($images)
+            ':images' => json_encode($images),
+            ':updated_by' => $updated_by
         ]);
     }
 

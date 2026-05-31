@@ -36,15 +36,50 @@
                         <input type="text" id="isbn" name="isbn" value="<?= htmlspecialchars($book['isbn']) ?>" class="w-full px-4 py-2.5 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-700 bg-white shadow-sm transition-all">
                     </div>
 
-                    <div>
-                        <label for="category" class="block text-sm font-bold text-sky-700 mb-1.5">Kategorie</label>
-                        <input type="text" id="category" name="category" value="<?= htmlspecialchars($book['category']) ?>" class="w-full px-4 py-2.5 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-700 bg-white shadow-sm transition-all">
-                    </div>
+                    <div class="mb-4">
+    <label for="category" class="block text-sm font-bold text-sky-800 mb-2">
+        Kategorie <span class="text-red-500">*</span>
+    </label>
+    
+    <select id="category" name="category" required 
+            class="w-full px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition-colors">
+        
+        <option value="" class="text-slate-400">-- Vyberte kategorii --</option>
+        
+        <?php foreach ($categories as $cat): ?>
+            <?php 
+            // Zkontrolujeme, zda ID aktuálně vykreslované kategorie odpovídá ID kategorie, kterou má kniha uloženou
+            $isSelected = ($book['category'] == $cat['id']) ? 'selected' : ''; 
+            ?>
+            
+            <option value="<?= htmlspecialchars($cat['id']) ?>" <?= $isSelected ?> class="text-slate-700">
+                <?= htmlspecialchars($cat['name'] ?? '') ?>
+            </option>
+        <?php endforeach; ?>
+        
+    </select>
+</div>
 
-                    <div>
-                        <label for="subcategory" class="block text-sm font-bold text-sky-700 mb-1.5">Podkategorie</label>
-                        <input type="text" id="subcategory" name="subcategory" value="<?= htmlspecialchars($book['subcategory']) ?>" class="w-full px-4 py-2.5 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-700 bg-white shadow-sm transition-all">
-                    </div>
+<div class="mb-4">
+    <label for="subcategory" class="block text-sm font-bold text-sky-700 mb-1.5">Podkategorie</label>
+    
+    <select id="subcategory" name="subcategory" class="w-full px-4 py-2.5 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 text-slate-700 bg-white shadow-sm transition-all">
+        
+        <option value="" class="text-slate-400">-- Vyberte podkategorii --</option>
+        
+        <?php foreach ($subcategories as $subcat): ?>
+            <?php 
+            // Zkontrolujeme, zda ID aktuálně vykreslované podkategorie odpovídá ID, které má kniha uloženou
+            $isSelected = ($book['subcategory'] == $subcat['id']) ? 'selected' : ''; 
+            ?>
+            
+            <option value="<?= htmlspecialchars($subcat['id']) ?>" <?= $isSelected ?> class="text-slate-700">
+                <?= htmlspecialchars($subcat['name'] ?? '') ?>
+            </option>
+        <?php endforeach; ?>
+        
+    </select>
+</div>
 
                     <div>
                         <label for="year" class="block text-sm font-bold text-sky-700 mb-1.5">Rok vydání <span class="text-red-400">*</span></label>

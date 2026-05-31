@@ -11,7 +11,7 @@ class AuthController {
     public function storeUser() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
-            // Očištění textových vstupů
+            // Očištění textových vstupů (ochrana proti XSS)
             $username = htmlspecialchars($_POST['username'] ?? '');
             $email = htmlspecialchars($_POST['email'] ?? '');
             $firstName = htmlspecialchars($_POST['first_name'] ?? '');
@@ -34,15 +34,6 @@ class AuthController {
                 header('Location: ' . BASE_URL . '/index.php?url=auth/register');
                 exit;
             }
-
-            // Kontrola síly hesla 
-            
-            if (strlen($password) < 8 || !preg_match('/[0-9]/', $password) || !preg_match('/[A-Z]/', $password)) {
-                $this->addErrorMessage('Heslo musí obsahovat alespoň 8 znaků, minimálně 1 číslo a 1 velké písmeno.');
-                header('Location: ' . BASE_URL . '/index.php?url=auth/register');
-                exit;
-            }
-            
 
             // Napojení na DB a Model
             require_once '../app/models/Database.php';
@@ -91,14 +82,13 @@ class AuthController {
                 // ÚSPĚCH: Uložíme si důležitá data do Session
                 $_SESSION['user_id'] = $user['id'];
                 
-                // ZMĚNA: Uložíme do Session i informaci o tom, zda je uživatel admin
-                $_SESSION['is_admin'] = $user['is_admin']; 
-
-                // ...
                 // Uložíme si jméno pro uvítání (přezdívku, nebo uživatelské jméno)
                 $_SESSION['user_name'] = !empty($user['nickname']) ? $user['nickname'] : $user['username'];
+                
+                // ZDE JE ZMĚNA: Do session si uložíme roli uživatele (user / admin) pro budoucí kontrolu oprávnění
+                $_SESSION['user_role'] = $user['role'] ?? 'user';
 
-                $this->addSuccessMessage('Vítejte zpět, ' . $_SESSION['user_name'] . '!');
+                $this->addSuccessMessage('Vítejte zpět v Kopačce, ' . $_SESSION['user_name'] . '!');
                 header('Location: ' . BASE_URL . '/index.php');
                 exit;
                 
@@ -113,16 +103,17 @@ class AuthController {
 
     // 5. Odhlášení uživatele
     public function logout() {
-        // Vymažeme specifická uživatelská data ze Session
+        // Vymažeme uživatelská data ze Session
         unset($_SESSION['user_id']);
         unset($_SESSION['user_name']);
+        unset($_SESSION['user_role']); // Smažeme i uloženou roli
         
         $this->addSuccessMessage('Byli jste úspěšně odhlášeni.');
         header('Location: ' . BASE_URL . '/index.php');
         exit;
     }
 
-    // --- Pomocné metody pro notifikace ---
+    // --- Pomocné metody pro systém notifikací ---
     protected function addSuccessMessage($message) {
         $_SESSION['messages']['success'][] = $message;
     }
