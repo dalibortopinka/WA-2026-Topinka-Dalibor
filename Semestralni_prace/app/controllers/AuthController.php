@@ -7,7 +7,7 @@ class AuthController {
         require_once '../app/views/auth/register.php';
     }
 
-    // 2. Zpracování dat z registrace
+   // 2. Zpracování dat z registrace
     public function storeUser() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
@@ -31,6 +31,13 @@ class AuthController {
 
             if ($password !== $passwordConfirm) {
                 $this->addErrorMessage('Zadaná hesla se neshodují.');
+                header('Location: ' . BASE_URL . '/index.php?url=auth/register');
+                exit;
+            }
+
+            // IMPLEMENTACE: Vynucení bezpečného hesla (min 8 znaků a minimálně 1 číslo)
+            if (strlen($password) < 8 || !preg_match('/[0-9]/', $password)) {
+                $this->addErrorMessage('Heslo je příliš slabé! Musí mít alespoň 8 znaků a obsahovat minimálně jedno číslo.');
                 header('Location: ' . BASE_URL . '/index.php?url=auth/register');
                 exit;
             }
